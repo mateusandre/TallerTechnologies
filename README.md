@@ -7,4 +7,4 @@ C# Blazor
 
 # SQL script
 
-You can check the SQL script at the SQL directory
+You can check the SQL script at the \sql directory
