@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TallerTechnologies.WebUI", "src\TallerTechnologies.WebUI\TallerTechnologies.WebUI.csproj", "{6CA318F9-063B-4120-B7B1-876869EBC438}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{B77FC6CC-9417-462C-B14A-95C54E000599}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TallerTechnologies.UnitTests", "tests\TallerTechnologies.UnitTests\TallerTechnologies.UnitTests.csproj", "{267BA282-684F-4A62-85F8-A7307EBDEA04}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{0597BC31-126C-46A1-866D-247EA7CBD633}"
+	ProjectSection(SolutionItems) = preProject
+		script.sql = script.sql
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6CA318F9-063B-4120-B7B1-876869EBC438}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CA318F9-063B-4120-B7B1-876869EBC438}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CA318F9-063B-4120-B7B1-876869EBC438}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CA318F9-063B-4120-B7B1-876869EBC438}.Release|Any CPU.Build.0 = Release|Any CPU
+		{267BA282-684F-4A62-85F8-A7307EBDEA04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{267BA282-684F-4A62-85F8-A7307EBDEA04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{267BA282-684F-4A62-85F8-A7307EBDEA04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{267BA282-684F-4A62-85F8-A7307EBDEA04}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{267BA282-684F-4A62-85F8-A7307EBDEA04} = {B77FC6CC-9417-462C-B14A-95C54E000599}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {127C2498-6DC9-460B-8680-E69F0BC3BEF4}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,166 @@
+﻿@page "/"
+@page "/cars"
+
+<PageTitle>Cars</PageTitle>
+
+@using TallerTechnologies.WebUI.Data
+@using TallerTechnologies.WebUI.Data.Models
+@inject CarService CarService
+
+<h1>Cars</h1>
+
+<a href="/cars/new" class="btn btn-success">New Car</a>
+
+
+@if (CarsList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Make</th>
+                <th>Model</th>
+                <th>Year</th>
+                <th>Doors</th>
+                <th>Color</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var car in CarsList)
+            {
+                <tr>
+                    <td>
+                        <a href="/cars/edit/@car.Id" class="btn btn-primary">Edit</a>
+                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCar" @onclick="() => SelectCar(car.Id)">Delete</button>
+                    </td>
+                    <td>@car.Make</td>
+                    <td>@car.Model</td>
+                    <td>@car.Year</td>
+                    <td>@car.Doors</td>
+                    <td>@car.Color</td>
+                    <td><button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#guessPrice" @onclick="() => SelectCar(car.Id)">Guess Price</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<!-- Modal -->
+<div class="modal fade" id="guessPrice" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <EditForm Model="Guess" OnSubmit="() => GuessPrice()">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Guess Price</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="() => ClearGuess()"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                            <p><strong>Make:</strong> @SelectedCar?.Make</p>
+                            <p><strong>Model:</strong> @SelectedCar?.Model</p>
+                            <p><strong>Year:</strong> @SelectedCar?.Year</p>
+                            <p><strong>Doors:</strong> @SelectedCar?.Doors</p>
+                            <p><strong>Color:</strong> @SelectedCar?.Color</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="mb-3">how much do you think this car costs??</label>
+                            <div class="input-group mb-3">
+                              <span class="input-group-text" id="basic-addon1">$</span>
+                                <InputNumber @bind-Value="Guess" class="form-control" autofocus />
+                            </div>
+                            @if (IsCorrectAnswer == true)
+                            {
+                                <div class="alert alert-light text-success border mt-3" role="alert">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                                    </svg>
+                                    <strong>Great Job! the right price is: $@SelectedCar?.Price</strong>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal" @onclick="() => ClearGuess()">Close</button>
+                    <button type="submit" class="btn btn-primary">Check guess</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteCar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Do you really want to delete this car?</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <p><strong>Make:</strong> @SelectedCar?.Make</p>
+                        <p><strong>Model:</strong> @SelectedCar?.Model</p>
+                        <p><strong>Year:</strong> @SelectedCar?.Year</p>
+                        <p><strong>Doors:</strong> @SelectedCar?.Doors</p>
+                        <p><strong>Color:</strong> @SelectedCar?.Color</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @onclick="() => DeleteCar(SelectedCar?.Id)">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<Car>? CarsList;
+    private Car? SelectedCar;
+    private decimal Guess;
+    private bool IsCorrectAnswer = false;
+
+    protected override void OnInitialized()
+    {
+        GetCars();
+    }
+
+    public void DeleteCar(int? id)
+    {
+        if (id is not null)
+        {
+            CarService.DeleteCar((int)id);
+        }
+    }
+
+    public void SelectCar(int id)
+    {
+        SelectedCar = CarsList?.FirstOrDefault(x => x.Id == id);
+    }
+
+    public void GuessPrice()
+    {
+        IsCorrectAnswer = CarService.GuessPrice(SelectedCar!.Id, Guess);
+    }
+
+    public void ClearGuess()
+    {
+        Guess = 0;
+        IsCorrectAnswer = false;
+    }
+
+    protected void GetCars()
+    {
+        CarsList = CarService.GetAllCars();
+    }
+}

@@ -1,0 +1,90 @@
+﻿@page "/cars/new"
+@page "/cars/edit/{id:int}"
+@using TallerTechnologies.WebUI.Data
+@using TallerTechnologies.WebUI.Data.Models
+@inject CarService CarService
+@inject NavigationManager NavigationManager
+
+<h3>@(Id == default ? "New Car" : "Edit Car")</h3>
+
+<EditForm Model="Car" OnValidSubmit="() => Save()">
+    <DataAnnotationsValidator />
+    <div class="row">
+        <div class="col mb-3">
+            <label class="fw-bold">Make</label>
+            <InputText @bind-Value="Car.Make" class="form-control"></InputText>
+            <ValidationMessage For="() => Car.Make" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col mb-3">
+            <label class="fw-bold">Model</label>
+            <InputText @bind-Value="Car.Model" class="form-control"></InputText>
+            <ValidationMessage For="() => Car.Model" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col mb-3">
+            <label class="fw-bold">Year</label>
+            <InputNumber @bind-Value="Car.Year" class="form-control"></InputNumber>
+            <ValidationMessage For="() => Car.Year" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col mb-3">
+            <label class="fw-bold">Doors</label>
+            <InputNumber @bind-Value="Car.Doors" class="form-control"></InputNumber>
+            <ValidationMessage For="() => Car.Doors" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col mb-3">
+            <label class="fw-bold">Color</label>
+            <InputText @bind-Value="Car.Color" class="form-control"></InputText>
+            <ValidationMessage For="() => Car.Color" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col mb-3">
+            <label class="fw-bold">Price</label>
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="basic-addon1">$</span>
+                <InputNumber @bind-Value="Car.Price" class="form-control" aria-describedby="basic-addon1"></InputNumber>
+            </div>
+            <ValidationMessage For="() => Car.Price" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col mb-3">
+            <a href="/cars" class="btn btn-light">Cancel</a>
+            <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    public Car Car { get; set; } = new();
+
+    protected override void OnInitialized()
+    {
+        Car = CarService.GetCar(Id);
+    }
+
+    public void Save()
+    {
+        if (Id == default)
+        {
+            CarService.AddCar(Car);            
+        }
+        else
+        {            
+            CarService.UpdateCar(Car);
+        }
+
+        NavigationManager.NavigateTo("/");
+    }
+}
